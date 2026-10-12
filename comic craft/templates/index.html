@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>ComicCraft - Create Your Comic</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+<main class="shell">
+
+    <header class="hero">
+
+        <div class="brand">
+            ✦ COMICCRAFT
+        </div>
+
+        <p class="eyebrow">
+            YOUR IMAGINATION, PANEL BY PANEL
+        </p>
+
+        <h1>
+            Turn your idea into a
+            <span>comic story.</span>
+        </h1>
+
+        <p class="sub">
+            Create a story, meet your characters,
+            and bring each scene to life.
+        </p>
+
+    </header>
+
+    {% if error %}
+
+    <div class="alert">
+
+        <strong>
+            Could not complete that request.
+        </strong>
+
+        <br>
+
+        {{ error }}
+
+        <p>
+            Check your API keys and terminal output,
+            then try again.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+    <form
+        class="form-card"
+        action="/generate"
+        method="post"
+    >
+
+        <label>
+            Story idea
+
+            <textarea
+                name="prompt"
+                required
+                minlength="5"
+                maxlength="1200"
+                placeholder="A brave fox discovers a hidden city beneath an enchanted forest..."
+            >{{ form.prompt if form else '' }}</textarea>
+
+        </label>
+
+        <div class="grid">
+
+            <label>
+                Main character
+
+                <input
+                    name="character_name"
+                    maxlength="60"
+                    required
+                    value="{{ form.character_name if form else 'Alex' }}"
+                >
+            </label>
+
+            <label>
+                Setting
+
+                <input
+                    name="setting"
+                    maxlength="100"
+                    value="{{ form.setting if form else 'enchanted forest' }}"
+                >
+            </label>
+
+            <label>
+                Story tone
+
+                <select name="tone">
+
+                    {% for item in [
+                        'adventurous',
+                        'funny',
+                        'dramatic',
+                        'poetic',
+                        'mysterious',
+                        'heartwarming'
+                    ] %}
+
+                    <option
+                        value="{{ item }}"
+                        {% if form and form.tone == item %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ item|title }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+            </label>
+
+            <label>
+                Art style
+
+                <select name="art_style">
+
+                    {% for item in [
+                        'comic book',
+                        'anime',
+                        'pixel art',
+                        'watercolor',
+                        'storybook',
+                        'realistic'
+                    ] %}
+
+                    <option
+                        value="{{ item }}"
+                        {% if form and form.art_style == item %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ item|title }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+            </label>
+
+            <label>
+                Number of panels
+
+                <select name="panels">
+
+                    {% for n in [3, 4, 5, 6] %}
+
+                    <option
+                        value="{{ n }}"
+                        {% if form and form.panels|int == n %}
+                        selected
+                        {% elif not form and n == 5 %}
+                        selected
+                        {% endif %}
+                    >
+                        {{ n }} panels
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+            </label>
+
+        </div>
+
+        <button
+            class="button"
+            type="submit"
+        >
+            Create my comic
+            <span>→</span>
+        </button>
+
+        <p class="fine">
+            Generation may take a few minutes
+            when live AI services are enabled.
+        </p>
+
+    </form>
+
+    <footer>
+        Made for curious minds · ComicCraft
+    </footer>
+
+</main>
+
+</body>
+</html>
